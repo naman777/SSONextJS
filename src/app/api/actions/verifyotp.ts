@@ -1,15 +1,15 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+"use server";
+
 import prisma from '@/db';
 
-export async function post(req: NextApiRequest, res: NextApiResponse) {
-    const { email, otp } = req.body;
+export default async function verifyotp(email: string, otp: string) {
 
     const user = await prisma.user.findUnique({
         where: { email },
     });
 
     if (!user || user.otp !== otp || user.otpExpiresAt! < new Date()) {
-        return res.status(400).json({ message: 'Invalid or expired OTP' });
+        return  'Invalid or expired OTP' ;
     }
 
     await prisma.user.update({
@@ -21,5 +21,5 @@ export async function post(req: NextApiRequest, res: NextApiResponse) {
         },
     });
 
-    res.json({ message: 'Email verified successfully' });
+    return 'Email verified successfully';
 }

@@ -1,33 +1,42 @@
+// src/components/SignupForm.tsx
 "use client"
 
 import { useState } from 'react';
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { signup } from '@/app/api/actions/signup';
 
 export default function SignupForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const router = useRouter();
-  
-  const handleSubmit = (event:any) => {
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    constsignup(name,email,password)
+    
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    const res = await signup(name, email, password);
+    if (res === "email already exists") {
+      alert("Email already exists");
+      router.push("/login");
+    } else {
+      alert("User created. Please verify your email.");
+    router.push(`/verifyemail?email=${email}`);
+    }
   };
 
   return (
     <div className="bg-black min-h-screen flex items-center justify-center">
-      <section className="bg-gray-900 text-gray-300 w-full max-w-md p-8 rounded-lg shadow-lg">
-        <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-white">
-          <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
-          Flowbite
-        </a>
-        <div className="p-6 space-y-4">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
-            Create an account
-          </h1>
+      <section className="bg-gray-900 text-gray-300 w-full max-w-md p-8 rounded-xl shadow-lg">
+        
+        <div className="p-2 space-y-4">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-300">
@@ -39,7 +48,7 @@ export default function SignupForm() {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-xl focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
                 placeholder="John Doe"
                 required
               />
@@ -54,7 +63,7 @@ export default function SignupForm() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-xl focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
                 placeholder="name@company.com"
                 required
               />
@@ -70,32 +79,29 @@ export default function SignupForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-xl focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
                 required
               />
             </div>
-            <div className="flex items-start">
-              <div className="flex items-center h-5">
-                <input
-                  id="terms"
-                  aria-describedby="terms"
-                  type="checkbox"
-                  className="w-4 h-4 border border-gray-700 rounded bg-gray-800 focus:ring-3 focus:ring-primary-500"
-                  required
-                />
-              </div>
-              <div className="ml-3 text-sm">
-                <label htmlFor="terms" className="font-light text-gray-400">
-                  I accept the{" "}
-                  <a className="font-medium text-primary-500 hover:underline" href="#">
-                    Terms and Conditions
-                  </a>
-                </label>
-              </div>
+            <div>
+              <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-300">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirm-password"
+                id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-xl focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 placeholder-gray-500"
+                required
+              />
             </div>
+            
             <button
               type="submit"
-              className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-500 font-medium rounded-xl text-sm px-5 py-2.5 text-center"
             >
               Create an account
             </button>

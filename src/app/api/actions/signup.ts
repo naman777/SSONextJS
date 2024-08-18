@@ -2,7 +2,7 @@
 import prisma from '@/db';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import { sendVerificationEmail } from "@/app/api/services/otpMail/route"; 
+import { sendVerificationEmail } from "./otpmail"; 
 
 export async function signup(name:string,email:string,password:string) {
 

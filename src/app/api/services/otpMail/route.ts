@@ -17,4 +17,6 @@ export const sendVerificationEmail = async (email: string, otp: string) => {
     };
 
     await transporter.sendMail(mailOptions);
+
+    return true;
 };

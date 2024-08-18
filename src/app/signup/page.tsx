@@ -1,17 +1,17 @@
-import SignupForm from "@/ui/InputBox";
+"use client"
 
+import SignupForm from "@/components/Signup";
+import { useRouter } from "next/navigation";
 export default function SignupPage() {
-    const handleFormSubmit = (formData:{
-        name: string;
-        email: string;
-        password: string;
-    }) => {
-        
-    };
+    const router = useRouter();
+    function navigate() {
+        router.push("/login");    
+    }
 
     return (
         <div>
-            <SignupForm onSubmit={handleFormSubmit} />
+            <h1 className="text-white bg-black">Create Your Account</h1>
+            <SignupForm navigate={navigate}/>
         </div>
     );
 }

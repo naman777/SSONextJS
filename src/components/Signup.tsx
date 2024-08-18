@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 import Link from "next/link";
+import { useRouter } from 'next/router';
+import { signup } from '@/app/api/actions/signup';
 
-export default function SignupForm({ onSubmit }:{
-    onSubmit: (data: { name: string; email: string; password: string }) => void;
-}) {
+export default function SignupForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
+  const router = useRouter();
+  
   const handleSubmit = (event:any) => {
     event.preventDefault();
-    onSubmit({ name, email, password });
+    constsignup(name,email,password)
   };
 
   return (
